@@ -4,5 +4,17 @@
     },
     "application_description": {
         "message": "Replace the default Chrome history with this better history plugin."
+    },
+    "search_placeholder": {
+        "message": "Search in history"
+    },
+    "search_display": {
+        "message": "Search results for"
+    },
+    "history_clear_all": {
+        "message": "Clear all"
+    },
+    "search_btn": {
+        "message": "Search history"
     }
 }
