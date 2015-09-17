@@ -2,15 +2,18 @@
 <head>
 
     <title>Chrome Better History</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
 
     <link rel="stylesheet" href="assets/styles.css" />
 
     <script src="assets/jquery.js"></script>
     <script src="assets/scripts.js"></script>
 
-    <link id="favicon" rel="icon" type="image/png" sizes="16x16" href="chrome://theme/IDR_HISTORY_FAVICON">
-    <link id="favicon2x" rel="icon" type="image/png" sizes="32x32" href="chrome://theme/IDR_HISTORY_FAVICON@2x">
+    <link rel="stylesheet" href="assets/datepicker/jquery.datetimepicker.css" />
+    <script src="assets/datepicker/jquery.datetimepicker.js"></script>
+
+    <link id="favicon" rel="icon" type="image/png" sizes="16x16" href="chrome://theme/IDR_HISTORY_FAVICON" />
+    <link id="favicon2x" rel="icon" type="image/png" sizes="32x32" href="chrome://theme/IDR_HISTORY_FAVICON@2x" />
 
 </head>
 
@@ -21,16 +24,19 @@
         <input id="search" type="search" i18n="placeholder:search_placeholder" placeholder="" autocomplete="off" />
         <button id="search-btn" i18n="search_btn"></button>
     </header>
-
-    <div id="main">
-        <div id="history-summary">
-            <div id="history-summary-text">
-                <div id="history-summary-label" i18n="search_display"></div>
-                <div id="history-summary-search"></div>
-            </div>
-            <a id="history-clear-all" i18n="history_clear_all"></a>
+    <div id="history-summary">
+        <div id="history-summary-separator"></div>
+        <div id="history-summary-text">
+            <div id="history-summary-label" i18n="search_display"></div>
+            <div id="history-summary-search"></div>
         </div>
-        <div id="history-display"><div class="content"></div></div>
+        <a id="history-clear-all" i18n="history_clear_all"></a>
+    </div>
+    <div id="main">
+        <div class="sidebar">
+            <div id="datepicker"></div>
+        </div>
+        <div id="content"></div>
     </div>
 
 </body>

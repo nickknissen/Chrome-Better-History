@@ -1,13 +1,14 @@
 {
     "name": "__MSG_application_title__",
     "description": "__MSG_application_description__",
-    "version": "0.1",
+    "version": "1.0",
     "default_locale": "en",
     "icons": {
         "128": "icon-128.png"
     },
     "manifest_version": 2,
     "permissions": [ "history", "chrome://favicon/" ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "chrome_url_overrides": {
         "history": "history.html"
     }

@@ -43,6 +43,7 @@ header h1 {
     margin: 15px 0;
     display: inline-block;
     flex: 1;
+    white-space: nowrap;
 }
 
 button {
@@ -97,6 +98,11 @@ button:focus {
     text-decoration: underline;
 }
 
+#history-summary-separator {
+    flex: none;
+    width: 290px;
+}
+
 #history-summary-text {
     flex: 1;
 }
@@ -114,39 +120,40 @@ button:focus {
     flex: none;
 }
 
-#history-display {
+#main .sidebar {
+    padding: 20px;
+}
+
+#content {
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 300px;
     right: 0;
     top: 71px;
     overflow: auto;
+    padding-bottom: 20px;
 }
 
-#history-display .content {
-    margin: 0 20px 20px 20px;
-}
-
-#history-display .content h2 {
+#content h2 {
     margin: 20px 0;
 }
 
-#history-display .row {
+#content .row {
     display: table-row;
 }
 
-#history-display .row .date,
-#history-display .row .link {
+#content .row .date,
+#content .row .link {
     display: inline-block;
     line-height: 2;
     vertical-align: middle;
 }
 
-#history-display .row .date {
+#content .row .date {
     width: 70px;
 }
 
-#history-display .row .link {
+#content .row .link {
     max-width: 700px;
     overflow: hidden;
     text-overflow: ellipsis;

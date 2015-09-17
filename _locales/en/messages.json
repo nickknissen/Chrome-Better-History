@@ -1,4 +1,7 @@
 {
+    "language": {
+        "message": "en"
+    },
     "application_title": {
         "message": "Chrome Better History"
     },
@@ -16,5 +19,8 @@
     },
     "search_btn": {
         "message": "Search history"
+    },
+    "warning_history_clear": {
+        "message": "Are you sure that you want to clear all history?"
     }
 }
