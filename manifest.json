@@ -7,7 +7,7 @@
         "128": "icon-128.png"
     },
     "manifest_version": 2,
-    "permissions": [ "history", "chrome://favicon/", "tabs" ],
+    "permissions": [ "history", "chrome://favicon/" ],
     "chrome_url_overrides": {
         "history": "history.html"
     }
