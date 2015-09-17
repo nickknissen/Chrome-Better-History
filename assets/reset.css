@@ -1,0 +1,122 @@
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+body * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-collapse: collapse;
+}
+
+td,th,tr,thead,tfoot,tbody,caption,table,button,legend,label,form,fieldset,
+ul,ol,li,dt,dl,dd,var,tt,sup,sub,strong,strike,small,samp,s,q,img,em,dfn,del,
+code,cite,address,acronym,abbr,a,pre,blockquote,p,h6,h5,h4,h3,h2,h1,div {
+    font-weight: normal;
+    font-style: normal;
+    font-family: inherit;
+    line-height: 1;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+fieldset {
+    padding: 5px;
+}
+
+input, select, textarea, button {
+    margin: 0;
+    outline: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+optgroup {
+    font-style: normal;
+}
+
+/*
+ * Remove button padding in FF
+ */
+select::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * Clear Fix
+ */
+.clear {
+    clear: both;
+}
+
+/*
+ * Improves image quality when scaled in IE7
+ */
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
+/*
+ * Removes default vertical scrollbar in IE6/7/8/9
+ * Improves readability and alignment in all browsers
+ */
+textarea {
+    overflow: auto;
+    vertical-align: top;
+}
+
+/*
+ * Removes inner padding and border in FF3+
+ */
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * Corrects block display not defined in IE6/7/8/9 & FF3
+ */
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+    display: block;
+}
+
+/*
+ * Corrects inline-block display not defined in IE6/7/8/9 & FF3
+ */
+audio, canvas, video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Remove IE10's “clear field” X button
+ */
+::-ms-clear {
+    display: none;
+}
