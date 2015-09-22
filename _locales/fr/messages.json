@@ -1,0 +1,35 @@
+{
+    "language": {
+        "message": "fr"
+    },
+    "application_title": {
+        "message": "Chrome Better History"
+    },
+    "application_description": {
+        "message": "Remplace l'historique Chrome par défaut par un meilleur."
+    },
+    "search_placeholder": {
+        "message": "Rechercher dans l'historique"
+    },
+    "search_display": {
+        "message": "Résultats de recherche pour"
+    },
+    "history_clear_all": {
+        "message": "Vider l'historique"
+    },
+    "search_btn": {
+        "message": "Rechercher"
+    },
+    "warning_history_clear": {
+        "message": "Êtes-vous sûr de vouloir supprimer votre historique ?"
+    },
+    "history_date_empty": {
+        "message": "Il n'y a pas d'entrée d'historique pour ce jour"
+    },
+    "datepicker_go_today": {
+        "message": "Afficher aujourd'hui"
+    },
+    "created_by": {
+        "message": "Créer par"
+    }
+}
