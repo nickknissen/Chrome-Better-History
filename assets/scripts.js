@@ -55,6 +55,12 @@ var getHistoryByDay = function(day, scroll){
     });
 };
 
+var ucfirst = function (str) {
+    str += '';
+    var f = str.charAt(0).toUpperCase();
+    return f + str.substr(1);
+};
+
 var search = function(){
     var text = $('#search').val();
     if(text){
@@ -107,11 +113,11 @@ var historyResponse = function(results, start, end, scroll){
         if(!$('#container #' + k).length){
             output+= '<div class="entry" id="' + k + '">';
         }
-        output+= '<h2>' + new Date(parseFloat(k)).toDateString() + '</h2>';
+        output+= '<h2>' + ucfirst(new Date(parseFloat(k)).toLocaleDateString(getLanguage(), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })) + '</h2>';
         $.each(v, function(id, item){
             if(id != 'empty'){
                 output+= '<span class="row" id="' + item[0] + '">';
-                output+= '<span class="date">' + new Date(parseFloat(id)).toLocaleTimeString() + '</span>';
+                output+= '<span class="date">' + new Date(parseFloat(id)).toLocaleTimeString(getLanguage(), {hour12: false}) + '</span>';
                 output+= '<a class="link" href="' + item[2] + '" target="_blank" style="' + getFavicon(item[2]) + '">' + (item[1] ? item[1] : item[2]) + '</a>';
                 output+= '</span>';
             } else {
@@ -175,6 +181,7 @@ $(document).ready(function(){
         value: new Date(),
         maxDate: today,
         inline: true,
+        todayButton: false,
         lang: getLanguage(),
         onSelectDate: function(date){
             getHistoryByDay(date);
@@ -221,6 +228,11 @@ $(document).ready(function(){
                 getHistoryByDay(today);
             });
         }
+    });
+
+    $('#datepicker-today').on('click', function(){
+        $('#datepicker').datetimepicker({value: new Date()});
+        getHistoryByDay(today);
     });
 
 });
