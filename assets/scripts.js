@@ -25,12 +25,22 @@ var getLanguage = function(){
     return chrome.i18n.getMessage('language');
 };
 
+var getContainerScrollHeight = function(){
+    return $('#container').prop('scrollHeight') - 939;
+};
+
+var clearSearch = function(){
+    $('#container').html('');
+    $('#search').val('');
+    $('#history-summary-label').hide();
+    $('#history-summary-search').hide();
+    is_searching = false;
+};
+
 var getHistoryByDay = function(day, scroll){
     scroll = scroll == undefined;
     if(is_searching){
-        $('#container').html('');
-        $('#search').val('');
-        is_searching = false;
+        clearSearch();
     }
     var dateStart = new Date(day.getFullYear(),day.getMonth(),day.getDate(),0,0,0,0);
     var dateEnd = new Date(day.getFullYear(),day.getMonth(),day.getDate(),23,59,59);
@@ -56,14 +66,14 @@ var search = function(){
             startTime: dateStart.getTime(),
             endTime: dateEnd.getTime()
         };
+        $('#history-summary-label').css('display', 'inline-block');
+        $('#history-summary-search').html(text).css('display', 'inline-block');
         chrome.history.search(query, function(results){
             historyResponse(results, dateStart, dateEnd, false);
         });
     } else {
         if(is_searching){
-            $('#container').html('');
-            $('#search').val('');
-            is_searching = false;
+            clearSearch();
         }
         getHistoryByDay(today);
     }
@@ -185,8 +195,7 @@ $(document).ready(function(){
 
     $('#container').on('scroll', function(){
         if(!is_searching){
-            var height = $('#container').prop('scrollHeight') - 939;
-            if(($(this).get(0).scrollTop) >= height * 0.9){
+            if(($(this).get(0).scrollTop) >= getContainerScrollHeight() * 0.9){
                 var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
                 last.setDate(last.getDate() - 1);
                 if($('#' + last.getTime()).length == 0){
