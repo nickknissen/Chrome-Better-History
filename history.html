@@ -4,13 +4,15 @@
     <title>Chrome Better History</title>
     <meta charset="utf-8" />
 
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/reset.css" />
 
     <script src="assets/jquery.js"></script>
     <script src="assets/scripts.js"></script>
 
     <link rel="stylesheet" href="assets/datepicker/jquery.datetimepicker.css" />
     <script src="assets/datepicker/jquery.datetimepicker.js"></script>
+
+    <link rel="stylesheet" href="assets/styles.css" />
 
     <link id="favicon" rel="icon" type="image/png" sizes="16x16" href="chrome://theme/IDR_HISTORY_FAVICON" />
     <link id="favicon2x" rel="icon" type="image/png" sizes="32x32" href="chrome://theme/IDR_HISTORY_FAVICON@2x" />
@@ -35,6 +37,11 @@
     <div id="main">
         <div class="sidebar">
             <div id="datepicker"></div>
+            <a id="datepicker-today" i18n="datepicker_go_today"></a>
+            <div class="copy">
+                <span i18n="created_by"></span> David Zeller<br />
+                <a href="https://www.zellerda.com" target="_blank">https://www.zellerda.com</a>
+            </div>
         </div>
         <div id="container"></div>
     </div>
