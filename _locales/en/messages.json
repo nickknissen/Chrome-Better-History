@@ -25,5 +25,11 @@
     },
     "history_date_empty": {
         "message": "This day has no history entries"
+    },
+    "datepicker_go_today": {
+        "message": "Display today"
+    },
+    "created_by": {
+        "message": "Created by"
     }
 }
