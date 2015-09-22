@@ -34,6 +34,7 @@ var clearSearch = function(){
     $('#search').val('');
     $('#history-summary-label').hide();
     $('#history-summary-search').hide();
+    $('#datepicker').datetimepicker({minDate:false});
     is_searching = false;
 };
 
@@ -57,6 +58,7 @@ var getHistoryByDay = function(day, scroll){
 var search = function(){
     var text = $('#search').val();
     if(text){
+        $('#datepicker').datetimepicker({minDate:today});
         is_searching = true;
         $('#container').html('<div class="loading"></div>');
         var dateStart = new Date(1970,1,1,0,0,0,0);
@@ -195,13 +197,29 @@ $(document).ready(function(){
 
     $('#container').on('scroll', function(){
         if(!is_searching){
-            if(($(this).get(0).scrollTop) >= getContainerScrollHeight() * 0.9){
+            if(($(this)[0].scrollTop) >= getContainerScrollHeight() * 0.9){
                 var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
                 last.setDate(last.getDate() - 1);
                 if($('#' + last.getTime()).length == 0){
                     getHistoryByDay(last, false);
                 }
             }
+
+            var cur = $('#container .entry').map(function(){
+                if ($(this).offset().top < $(this)[0].scrollTop + 100)
+                    return this;
+            });
+
+            cur = $(cur[cur.length-1]);
+            $('#datepicker').datetimepicker({value: new Date(parseFloat(cur.attr('id')))});
+        }
+    });
+
+    $('#history-clear-all').on('click', function(){
+        if(confirm(chrome.i18n.getMessage('warning_history_clear'))){
+            chrome.history.deleteAll(function(){
+                getHistoryByDay(today);
+            });
         }
     });
 
