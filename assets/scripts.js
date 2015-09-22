@@ -84,7 +84,7 @@ var historyResponse = function(results, start, end, scroll){
         if(!datas[item_date_day]){
             datas[item_date_day] = {};
         }
-        datas[item_date_day][v.id] = [item_date.getTime(), v.title, v.url];
+        datas[item_date_day][v.lastVisitTime] = [v.id, v.title, v.url];
     });
     if($.isEmptyObject(datas)){
         datas[start.getTime()] = {};
@@ -98,8 +98,8 @@ var historyResponse = function(results, start, end, scroll){
         output+= '<h2>' + new Date(parseFloat(k)).toDateString() + '</h2>';
         $.each(v, function(id, item){
             if(id != 'empty'){
-                output+= '<span class="row" id="' + id + '">';
-                output+= '<span class="date">' + new Date(item[0]).toLocaleTimeString() + '</span>';
+                output+= '<span class="row" id="' + item[0] + '">';
+                output+= '<span class="date">' + new Date(parseFloat(id)).toLocaleTimeString() + '</span>';
                 output+= '<a class="link" href="' + item[2] + '" target="_blank" style="' + getFavicon(item[2]) + '">' + (item[1] ? item[1] : item[2]) + '</a>';
                 output+= '</span>';
             } else {
@@ -186,7 +186,7 @@ $(document).ready(function(){
     $('#container').on('scroll', function(){
         if(!is_searching){
             var height = $('#container').prop('scrollHeight') - 939;
-            if(($(this).get(0).scrollTop) >= height * 0.8){
+            if(($(this).get(0).scrollTop) >= height * 0.9){
                 var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
                 last.setDate(last.getDate() - 1);
                 if($('#' + last.getTime()).length == 0){
