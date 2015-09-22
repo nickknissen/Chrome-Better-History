@@ -124,7 +124,7 @@ button:focus {
     padding: 20px;
 }
 
-#content {
+#container {
     position: absolute;
     bottom: 0;
     left: 300px;
@@ -134,27 +134,27 @@ button:focus {
     padding-bottom: 20px;
 }
 
-#content h2 {
+#container h2 {
     margin: 20px 0;
 }
 
-#content .row {
+#container .row {
     display: table-row;
 }
 
-#content .row .date,
-#content .row .link,
-#content .row.empty span {
+#container .row .date,
+#container .row .link,
+#container .row.empty span {
     display: inline-block;
     line-height: 2;
     vertical-align: middle;
 }
 
-#content .row .date {
+#container .row .date {
     width: 70px;
 }
 
-#content .row .link {
+#container .row .link {
     max-width: 700px;
     overflow: hidden;
     text-overflow: ellipsis;

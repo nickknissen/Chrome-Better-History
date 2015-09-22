@@ -20,12 +20,18 @@
  * @since       2.0
  */
 
-var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0);
+var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), is_searching = false;
 var getLanguage = function(){
     return chrome.i18n.getMessage('language');
 };
 
-var getHistoryByDay = function(day){
+var getHistoryByDay = function(day, scroll){
+    scroll = scroll == undefined;
+    if(is_searching){
+        $('#container').html('');
+        $('#search').val('');
+        is_searching = false;
+    }
     var dateStart = new Date(day.getFullYear(),day.getMonth(),day.getDate(),0,0,0,0);
     var dateEnd = new Date(day.getFullYear(),day.getMonth(),day.getDate(),23,59,59);
     var query = {
@@ -34,17 +40,41 @@ var getHistoryByDay = function(day){
         endTime: dateEnd.getTime()
     };
     chrome.history.search(query, function(results){
-        historyResponse(results, dateStart, dateEnd, query);
+        historyResponse(results, dateStart, dateEnd, scroll);
     });
+};
+
+var search = function(){
+    var text = $('#search').val();
+    if(text){
+        is_searching = true;
+        $('#container').html('<div class="loading"></div>');
+        var dateStart = new Date(1970,1,1,0,0,0,0);
+        var dateEnd = new Date(today.getFullYear(),today.getMonth(),today.getDate(),23,59,59);
+        var query = {
+            text: text,
+            startTime: dateStart.getTime(),
+            endTime: dateEnd.getTime()
+        };
+        chrome.history.search(query, function(results){
+            historyResponse(results, dateStart, dateEnd, false);
+        });
+    } else {
+        if(is_searching){
+            $('#container').html('');
+            $('#search').val('');
+            is_searching = false;
+        }
+        getHistoryByDay(today);
+    }
 };
 
 var getFavicon = function(url){
     return 'background-image: -webkit-image-set(url(chrome://favicon/size/16@1x/' + url + ') 1x, url(chrome://favicon/size/16@2x/' + url + ') 2x)';
 };
 
-var historyResponse = function(results, start, end, query){
+var historyResponse = function(results, start, end, scroll){
     var datas = {}, item_date, item_date_day;
-
     $.each(results, function(k, v){
         item_date = new Date(v.lastVisitTime);
         item_date_day = new Date(item_date.getFullYear(),item_date.getMonth(),item_date.getDate(),0,0,0,0).getTime();
@@ -56,15 +86,13 @@ var historyResponse = function(results, start, end, query){
         }
         datas[item_date_day][v.id] = [item_date.getTime(), v.title, v.url];
     });
-
     if($.isEmptyObject(datas)){
         datas[start.getTime()] = {};
         datas[start.getTime()]['empty'] = [];
     }
-
     $.each(datas, function(k, v){
         var output = '';
-        if(!$('#content #' + k).length){
+        if(!$('#container #' + k).length){
             output+= '<div class="entry" id="' + k + '">';
         }
         output+= '<h2>' + new Date(parseFloat(k)).toDateString() + '</h2>';
@@ -80,32 +108,41 @@ var historyResponse = function(results, start, end, query){
                 output+= '</span></span>';
             }
         });
-        if(!$('#content #' + k).length){
+        if(!$('#container #' + k).length){
             output+= '</div>';
         }
-        if($('#content #' + k).length){
+        if($('#container #' + k).length){
             $('#' + k).html(output);
         } else {
-            if($('#content > .entry').length){
-                var prev;
-                $('#content > .entry').each(function(){
-                    if(k > $(this).attr('id')){
-                        prev = prev || $(this);
-                        $(output).insertAfter(prev);
+            if($('#container > .entry').length){
+                $('#container > .entry').each(function(){
+                    if($(this).is(':last-child')){
+                        if(k < $(this).attr('id')){
+                            $(output).insertAfter($(this));
+                        } else {
+                            $(output).insertBefore($(this));
+                        }
                         return false;
-                    } else if ($(this).is(':last-child')){
-                        $(output).insertAfter($(this));
+                    } else if(k > $(this).attr('id')){
+                        if(k < $(this).attr('id')){
+                            $(output).insertAfter($(this));
+                        } else {
+                            $(output).insertBefore($(this));
+                        }
+                        return false;
                     }
-                    prev = $(this);
                 });
             } else {
-                $('#content').append(output);
+                $('#container').append(output);
             }
         }
-        if($('#content #' + k).length){
-            $('#content').scrollTo('#' + k, { offsetTop: 91, duration: 100 });
+        if(scroll && $('#container #' + k).length){
+            $('#container').scrollTo('#' + k, { offsetTop: 91, duration: 100 });
         }
     });
+    if(is_searching && $('#container .loading').length){
+        $('#container .loading').remove();
+    }
 };
 
 $(document).ready(function(){
@@ -134,15 +171,40 @@ $(document).ready(function(){
 
     getHistoryByDay(today);
 
+    $('#search').on('keyup', function(e){
+        if(e.keyCode == 13){
+            search();
+        }
+    }).on('search', function(){
+        search();
+    });
+
+    $('#search-btn').on('click', function(){
+        search();
+    });
+
+    $('#container').on('scroll', function(){
+        if(!is_searching){
+            var height = $('#container').prop('scrollHeight') - 939;
+            if(($(this).get(0).scrollTop) >= height * 0.8){
+                var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
+                last.setDate(last.getDate() - 1);
+                if($('#' + last.getTime()).length == 0){
+                    getHistoryByDay(last, false);
+                }
+            }
+        }
+    });
+
 });
 
 $.fn.scrollTo = function( target, options, callback ){
     if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
     var settings = $.extend({
-        scrollTarget  : target,
-        offsetTop     : 50,
-        duration      : 100,
-        easing        : 'swing'
+        scrollTarget: target,
+        offsetTop: 50,
+        duration: 100,
+        easing: 'swing'
     }, options);
     return this.each(function(){
         var scrollPane = $(this);
