@@ -17,10 +17,10 @@
  * @package     Chrome Better History
  * @author      David Zeller <dev@zellerda.com>
  * @license     http://www.opensource.org/licenses/BSD-3-Clause New BSD license
- * @since       2.0
+ * @since       3.0
  */
 
-var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), is_searching = false;
+var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), is_searching = false, loading = false;
 var getLanguage = function(){
     return chrome.i18n.getMessage('language');
 };
@@ -38,8 +38,9 @@ var clearSearch = function(){
     is_searching = false;
 };
 
-var getHistoryByDay = function(day, scroll){
+var getHistoryByDay = function(day, scroll, nb){
     scroll = scroll == undefined;
+    nb = nb || 0;
     if(is_searching){
         clearSearch();
     }
@@ -48,8 +49,10 @@ var getHistoryByDay = function(day, scroll){
     var query = {
         text: '',
         startTime: dateStart.getTime(),
-        endTime: dateEnd.getTime()
+        endTime: dateEnd.getTime(),
+        maxResults: nb
     };
+    loading = true;
     chrome.history.search(query, function(results){
         historyResponse(results, dateStart, dateEnd, scroll);
     });
@@ -72,10 +75,12 @@ var search = function(){
         var query = {
             text: text,
             startTime: dateStart.getTime(),
-            endTime: dateEnd.getTime()
+            endTime: dateEnd.getTime(),
+            maxResults: 0
         };
         $('#history-summary-label').css('display', 'inline-block');
         $('#history-summary-search').html(text).css('display', 'inline-block');
+        loading = true;
         chrome.history.search(query, function(results){
             historyResponse(results, dateStart, dateEnd, false);
         });
@@ -155,12 +160,16 @@ var historyResponse = function(results, start, end, scroll){
             }
         }
         if(scroll && $('#container #' + k).length){
-            $('#container').scrollTo('#' + k, { offsetTop: 91, duration: 100 });
+            $('#container').scrollTo('#' + k, { offsetTop: 91, duration: 0 });
         }
     });
     if(is_searching && $('#container .loading').length){
         $('#container .loading').remove();
     }
+    if($('body.popup').length){
+        $('html, body').height($('.sizable').height());
+    }
+    loading = false;
 };
 
 $(document).ready(function(){
@@ -176,64 +185,71 @@ $(document).ready(function(){
         }
     });
 
-    $('#datepicker').datetimepicker({
-        timepicker: false,
-        value: new Date(),
-        maxDate: today,
-        inline: true,
-        todayButton: false,
-        lang: getLanguage(),
-        onSelectDate: function(date){
-            getHistoryByDay(date);
-        }
-    });
-
-    getHistoryByDay(today);
-
-    $('#search').on('keyup', function(e){
-        if(e.keyCode == 13){
-            search();
-        }
-    }).on('search', function(){
-        search();
-    });
-
-    $('#search-btn').on('click', function(){
-        search();
-    });
-
-    $('#container').on('scroll', function(){
-        if(!is_searching){
-            if(($(this)[0].scrollTop) >= getContainerScrollHeight() * 0.9){
-                var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
-                last.setDate(last.getDate() - 1);
-                if($('#' + last.getTime()).length == 0){
-                    getHistoryByDay(last, false);
-                }
+    if($('body.popup').length){
+        getHistoryByDay(today, false, 10);
+        $('#view-full-history').on('click', function(){
+            chrome.tabs.create({url: 'chrome://history'});
+        });
+    } else {
+        $('#datepicker').datetimepicker({
+            timepicker: false,
+            value: new Date(),
+            maxDate: today,
+            inline: true,
+            todayButton: false,
+            lang: getLanguage(),
+            onSelectDate: function(date){
+                getHistoryByDay(date);
             }
+        });
 
-            var cur = $('#container .entry').map(function(){
-                if ($(this).offset().top < $(this)[0].scrollTop + 100)
-                    return this;
-            });
-
-            cur = $(cur[cur.length-1]);
-            $('#datepicker').datetimepicker({value: new Date(parseFloat(cur.attr('id')))});
-        }
-    });
-
-    $('#history-clear-all').on('click', function(){
-        if(confirm(chrome.i18n.getMessage('warning_history_clear'))){
-            chrome.history.deleteAll(function(){
-                getHistoryByDay(today);
-            });
-        }
-    });
-
-    $('#datepicker-today').on('click', function(){
-        $('#datepicker').datetimepicker({value: new Date()});
         getHistoryByDay(today);
-    });
+
+        $('#search').on('keyup', function(e){
+            if(e.keyCode == 13){
+                search();
+            }
+        }).on('search', function(){
+            search();
+        });
+
+        $('#search-btn').on('click', function(){
+            search();
+        });
+
+        $('#container').on('scroll', function(){
+            if(!is_searching && !loading){
+                if(($(this)[0].scrollTop) >= getContainerScrollHeight() * 0.9){
+                    var last = new Date(parseFloat($('#container .entry:last-child').attr('id')));
+                    last.setDate(last.getDate() - 1);
+                    if($('#' + last.getTime()).length == 0){
+                        getHistoryByDay(last, false);
+                    }
+                }
+
+                var cur = $('#container .entry').map(function(){
+                    if ($(this).offset().top < $(this)[0].scrollTop + 100)
+                        return this;
+                });
+
+                cur = $(cur[cur.length-1]);
+                $('#datepicker').datetimepicker({value: new Date(parseFloat(cur.attr('id')))});
+            }
+        });
+
+        $('#history-clear-all').on('click', function(){
+            if(confirm(chrome.i18n.getMessage('warning_history_clear'))){
+                chrome.history.deleteAll(function(){
+                    getHistoryByDay(today);
+                });
+            }
+        });
+
+        $('#datepicker-today').on('click', function(){
+            $('#datepicker').datetimepicker({value: new Date()});
+            getHistoryByDay(today);
+        });
+    }
 
 });
 

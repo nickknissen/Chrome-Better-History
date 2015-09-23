@@ -25,6 +25,10 @@ a {
     cursor: pointer;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 h1, h2, h3 {
     -webkit-user-select: none;
 }
@@ -93,10 +97,6 @@ button:focus {
     display: flex;
 }
 
-#history-summary a:hover {
-    text-decoration: underline;
-}
-
 #history-summary-separator {
     flex: none;
     width: 290px;
@@ -140,7 +140,8 @@ button:focus {
 }
 
 #container .row {
-    display: table-row;
+    display: block;
+    white-space: nowrap;
 }
 
 #container .row .date,
@@ -153,10 +154,6 @@ button:focus {
 
 #container .row .date {
     width: 50px;
-}
-
-#main .sidebar a:hover {
-    text-decoration: underline;
 }
 
 #main .sidebar .copy {
@@ -187,4 +184,44 @@ button:focus {
     margin-top: 10px;
     text-align: center;
     -webkit-user-select: none;
+}
+
+body.popup {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    -webkit-user-select: none;
+}
+
+body.popup h1 {
+    margin: 0 15px;
+    font-size: 1.3em;
+    padding: 15px 0 0 0;
+}
+
+body.popup #container {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    top: auto;
+    padding: 10px 15px;
+    margin: 0;
+}
+
+body.popup .entry h2 {
+    display: none;
+}
+
+body.popup #container .row .link {
+    max-width: 400px;
+}
+
+body.popup #view-full-history {
+    display: block;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    border-top: 1px solid #ddd;
+    margin: 0 15px;
 }
