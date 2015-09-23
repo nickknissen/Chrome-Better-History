@@ -31,5 +31,11 @@
     },
     "created_by": {
         "message": "Created by"
+    },
+    "history_view_more": {
+        "message": "View full history"
+    },
+    "history_recent": {
+        "message": "Recent history"
     }
 }
