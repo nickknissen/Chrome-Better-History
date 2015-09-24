@@ -17,10 +17,10 @@
  * @package     Chrome Better History
  * @author      David Zeller <dev@zellerda.com>
  * @license     http://www.opensource.org/licenses/BSD-3-Clause New BSD license
- * @since       3.1
+ * @since       3.2
  */
 
-var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), is_searching = false, loading = false, entries;
+var now = new Date(), today = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), is_searching = false, loading = false;
 var getLanguage = function(){
     return chrome.i18n.getMessage('language');
 };
@@ -163,10 +163,6 @@ var historyResponse = function(results, start, end, scroll){
     if($('body.popup').length){
         $('html, body').height($('.sizable').height());
     }
-    entries = $('#container .entry').map(function(){
-        if ($(this).offset().top < $(this)[0].scrollTop + 100)
-            return this;
-    });
     loading = false;
 };
 
@@ -224,9 +220,6 @@ $(document).ready(function(){
                         getHistoryByDay(last, false);
                     }
                 }
-
-                var cur = $(entries[entries.length-1]);
-                $('#datepicker').datetimepicker({value: new Date(parseFloat(cur.attr('id')))});
             }
         });
 
