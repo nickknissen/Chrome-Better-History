@@ -37,5 +37,14 @@
     },
     "history_recent": {
         "message": "Historique récent"
+    },
+    "date_format": {
+        "message": "dddd, d mmmm yyyy"
+    },
+    "date_day_names": {
+        "message": "Dim|Lun|Mar|Mer|Jeu|Ven|Sam|Dimanche|Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi"
+    },
+    "date_month_names": {
+        "message": "Jan|Fev|Mar|Avr|Mai|Jun|Jui|Aou|Sep|Oct|Nov|Déc|Janvier|Février|Mars|Avril|Mai|Juin|Juillet|Août|Septembre|Octobre|Novembre|Décembre"
     }
 }
